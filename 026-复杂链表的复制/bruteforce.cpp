@@ -1,73 +1,125 @@
+
+#include <iostream>
+
+using namespace std;
+
+//  è°ƒè¯•å¼€å…³
+#define __tmain main
+
+#ifdef __tmain
+
+#define debug cout
+
+#else
+
+#define debug 0 && cout
+
+#endif // __tmain
+
+struct RandomListNode
+{
+	int label;
+	struct RandomListNode *next, *random;
+};
+
+
+//brute force
 class Solution
 {
 public:
-    ///  ÕÒµ½newHeadÖ¸ÏòµÄĞÂÁ´±íÖĞÓëÔ­À´Á´±íoldHeadµÄrandNode½Úµã¶ÔÓ¦µÄÄÇ¸ö½Úµã
-    ///
-    ///  ¸´ÖÆµÄÁ´±ínewHeadÓëÔ­Á´±íoldHead´æÔÚÒ»Ò»¶ÔÓ¦µÄ¹ØÏµ
-    ///  Òò´ËÊ¹ÓÃÁ½¸öÖ¸Õë(Ò»¸öÖ¸ÏòÔ­À´Á´±íÒ»¸öÖ¸ÏòĞÂÁ´±í)Í¬²½ÒÆ¶¯
-    ///  ¼´¿ÉÕÒµ½newHeadÖ¸ÏòµÄĞÂÁ´±íÖĞÓëÔ­À´Á´±íoldHeadµÄrandNode½Úµã¶ÔÓ¦µÄÄÇ¸ö½Úµã
-    RandomListNode* FindInNew(RandomListNode *oldHead, RandomListNode *newHead, RandomListNode *randNode)
-    {
-        RandomListNode *currNode = oldHead;
-        RandomListNode *newNode = newHead;
+	///  æ‰¾åˆ°newHeadæŒ‡å‘çš„æ–°é“¾è¡¨ä¸­ä¸åŸæ¥é“¾è¡¨oldHeadçš„randNodeèŠ‚ç‚¹å¯¹åº”çš„é‚£ä¸ªèŠ‚ç‚¹
+	///
+	///  å¤åˆ¶çš„é“¾è¡¨newHeadä¸åŸé“¾è¡¨oldHeadå­˜åœ¨ä¸€ä¸€å¯¹åº”çš„å…³ç³»
+	///  å› æ­¤ä½¿ç”¨ä¸¤ä¸ªæŒ‡é’ˆ(ä¸€ä¸ªæŒ‡å‘åŸæ¥é“¾è¡¨ä¸€ä¸ªæŒ‡å‘æ–°é“¾è¡¨)åŒæ­¥ç§»åŠ¨
+	///  å³å¯æ‰¾åˆ°newHeadæŒ‡å‘çš„æ–°é“¾è¡¨ä¸­ä¸åŸæ¥é“¾è¡¨oldHeadçš„randNodeèŠ‚ç‚¹å¯¹åº”çš„é‚£ä¸ªèŠ‚ç‚¹
+	RandomListNode* FindInNew(RandomListNode *oldHead, RandomListNode *newHead, RandomListNode *randNode)
+	{
+		RandomListNode *currNode = oldHead;
+		RandomListNode *newNode = newHead;
 
-        while(currNode != NULL && newNode != NULL)
-        {
-            if(randNode == currNode)
-            {
-                return newNode;
-            }
-            currNode = currNode->next;
-            newNode = newNode->next;
-        }
+		while(currNode != NULL && newNode != NULL)
+		{
+			if(randNode == currNode)
+			{
+				return newNode;
+			}
+			currNode = currNode->next;
+			newNode = newNode->next;
+		}
 
-        return NULL;
-    }
+		return NULL;
+	}
 
-    ///  ¸´ÖÆ²Ù×÷
-    RandomListNode* Clone(RandomListNode* pHead)
-    {
-        if(pHead == NULL)
-        {
-            return NULL;
-        }
+	///  å¤åˆ¶æ“ä½œ
+	RandomListNode* Clone(RandomListNode* pHead)
+	{
+		if(pHead == NULL)
+		{
+			return NULL;
+		}
 
-        RandomListNode *currNode = pHead;
-        RandomListNode *newHead = NULL, *preNode = NULL, *newNode = NULL;
+		RandomListNode *currNode = pHead;
+		RandomListNode *newHead = NULL, *preNode = NULL, *newNode = NULL;
 
-        ///  Ê×ÏÈ¸´ÖÆÔ­Á´±íµÄÆÕÍ¨Ö¸ÕëÓò, Ò»´Î±éÀú¼´¿ÉÍê³É
-        while(currNode != NULL)
-        {
-            newNode = new RandomListNode(currNode->label);
-            currNode = currNode->next;
+		///  é¦–å…ˆå¤åˆ¶åŸé“¾è¡¨çš„æ™®é€šæŒ‡é’ˆåŸŸ, ä¸€æ¬¡éå†å³å¯å®Œæˆ
+		while(currNode != NULL)
+		{
+			newNode = new RandomListNode;
+			newNode->label = currNode->label;
+			currNode = currNode->next;
 
-            if(preNode == NULL)
-            {
-                newHead = newNode;
-            }
-            else
-            {
-                preNode->next = newNode;
-            }
+			if(preNode == NULL)
+			{
+				newHead = newNode;
+			}
+			else
+			{
+				preNode->next = newNode;
+			}
 
-            preNode = newNode;
-        }
+			preNode = newNode;
+		}
 
-        //  ½Ó×Å¸´ÖÆËæ»úÖ¸ÕëÓò, ĞèÒªÁ½´Î±éÀú
-        currNode = pHead;
-        newNode = newHead;
-        while(currNode != NULL && newNode != NULL)
-        {
-            RandomListNode *randNode = currNode->random;                        ///  Ëæ»úÖ¸ÕëÓòrandNode
-            RandomListNode *newRandNode = FindInNew(pHead, newHead, randNode);  ///  ²éÕÒµ½ĞÂÁ´±íÖĞÓërandNode¶ÔÓ¦µÄÖ¸ÕëÓò
-            newNode->random = newRandNode;
+		//  æ¥ç€å¤åˆ¶éšæœºæŒ‡é’ˆåŸŸ, éœ€è¦ä¸¤æ¬¡éå†
+		currNode = pHead;
+		newNode = newHead;
+		while(currNode != NULL && newNode != NULL)
+		{
+			RandomListNode *randNode = currNode->random;                        ///  éšæœºæŒ‡é’ˆåŸŸrandNode
+			RandomListNode *newRandNode = FindInNew(pHead, newHead, randNode);  ///  æŸ¥æ‰¾åˆ°æ–°é“¾è¡¨ä¸­ä¸randNodeå¯¹åº”çš„æŒ‡é’ˆåŸŸ
+			newNode->random = newRandNode;
 
-            ///  Á´±íÍ¬²½ÒÆ¶¯
-            currNode = currNode->next;
-            newNode = newNode->next;
-        }
+			///  é“¾è¡¨åŒæ­¥ç§»åŠ¨
+			currNode = currNode->next;
+			newNode = newNode->next;
+		}
 
-        return newHead;
-    }
+		return newHead;
+	}
 
 };
+
+
+
+int __tmain( )
+{
+
+	RandomListNode list[4];
+	list[0].label = 1;
+	
+	list[0].next = &list[1];
+	list[0].random = list + 2;
+	list[1].label = 2;
+	list[1].next = &list[2];
+	list[1].random = list + 1;
+	list[2].label = 3;
+	list[2].next = &list[3];
+	list[2].random = &list[2];
+	list[3].label = 4;
+	list[3].next = NULL;
+	list[3].random = list;
+
+	Solution solu;
+	RandomListNode *head = solu.Clone(list);
+	return 0;
+}
