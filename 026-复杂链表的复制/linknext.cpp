@@ -2,7 +2,7 @@
 
 using namespace std;
 
-//  µ÷ÊÔ¿ª¹Ø
+//  è°ƒè¯•å¼€å…³
 #define __tmain main
 
 #ifdef __tmain
@@ -19,18 +19,15 @@ struct RandomListNode
 {
     int label;
     struct RandomListNode *next, *random;
-//    RandomListNode(int x)
-//    :label(x), next(NULL), random(NULL)
-//    {
-//    }
 };
 
 
+//linknext
 class Solution
 {
 public:
 
-    ///  ¸´ÖÆ²Ù×÷
+    ///  å¤åˆ¶æ“ä½œ
     RandomListNode* Clone(RandomListNode* pHead)
     {
         if(pHead == NULL)
@@ -41,32 +38,34 @@ public:
         RandomListNode *currNode = pHead;
         RandomListNode *newHead = NULL, *preNode = NULL, *newNode = NULL;
 
-        ///  Ê×ÏÈ¸´ÖÆÔ­Á´±íµÄÆÕÍ¨Ö¸ÕëÓò, Ò»´Î±éÀú¼´¿ÉÍê³É
-        ///  ½«ÐÂµÄ½ÚµãÁ´½ÓÔÓÔ­À´½ÚµãµÄÄ©Î²
+        ///  é¦–å…ˆå¤åˆ¶åŽŸé“¾è¡¨çš„æ™®é€šæŒ‡é’ˆåŸŸ, ä¸€æ¬¡éåŽ†å³å¯å®Œæˆ
+        ///  å°†æ–°çš„èŠ‚ç‚¹é“¾æŽ¥æ‚åŽŸæ¥èŠ‚ç‚¹çš„æœ«å°¾
         while(currNode != NULL)
         {
-            if((newNode = new RandomListNode(currNode->label)) == NULL)
+            RandomListNode *randNode = currNode->random;                        ///  éšæœºæŒ‡é’ˆåŸŸrandNode
+			RandomListNode *newNode = currNode->next;
+			if(randNode != NULL)
             {
                 perror("new error : ");
                 exit(-1);
             }
 
 
-            /// ½«ÐÂµÄ½ÚµãnewNodeÁ¬½ÓÔÚcurrNodeµÄºóÃæ
+            /// å°†æ–°çš„èŠ‚ç‚¹newNodeè¿žæŽ¥åœ¨currNodeçš„åŽé¢
             newNode->next = currNode->next;
             currNode->next = newNode;
 
-            ///  Ö¸ÏòÖ¸ÏòÏÂÒ»¸ö½Úµã
+            ///  æŒ‡å‘æŒ‡å‘ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
             currNode = newNode->next;
         }
 
-        ///  ½Ó×Å¸´ÖÆËæ»úÖ¸ÕëÓò
-        ///  Ô­À´½ÚµãµÄÏÂÒ»¸öÎ»ÖÃ¾ÍÊÇÆä¶ÔÓ¦µÄÐÂ½Úµã
+        ///  æŽ¥ç€å¤åˆ¶éšæœºæŒ‡é’ˆåŸŸ
+        ///  åŽŸæ¥èŠ‚ç‚¹çš„ä¸‹ä¸€ä¸ªä½ç½®å°±æ˜¯å…¶å¯¹åº”çš„æ–°èŠ‚ç‚¹
         currNode = pHead;
         newNode = pHead->next;
         while(currNode != NULL)
         {
-            RandomListNode *randNode = currNode->random;                        ///  Ëæ»úÖ¸ÕëÓòrandNode
+            RandomListNode *randNode = currNode->random;                        ///  éšæœºæŒ‡é’ˆåŸŸrandNode
             RandomListNode *newNode = currNode->next;
             if(randNode != NULL)
             {
@@ -78,12 +77,12 @@ public:
             {
                 newNode->random = NULL;
             }
-            ///  Á´±íÍ¬²½ÒÆ¶¯
+            ///  é“¾è¡¨åŒæ­¥ç§»åŠ¨
             currNode = newNode->next;
         }
 
-        /// ½«Á´½ÓÔÚÒ»ÆðµÄÐÂ¾ÉÁ½¸öÁ´±í²ð·Ö¿ª
-        /// ÍÑÁ´£¬¸üÐÂ¸÷Á´±íµÄnextÖ¸Õë
+        /// å°†é“¾æŽ¥åœ¨ä¸€èµ·çš„æ–°æ—§ä¸¤ä¸ªé“¾è¡¨æ‹†åˆ†å¼€
+        /// è„±é“¾ï¼Œæ›´æ–°å„é“¾è¡¨çš„nextæŒ‡é’ˆ
         currNode = pHead;
         newNode = newHead = pHead->next;
         while(currNode != NULL)
@@ -118,14 +117,21 @@ int __tmain( )
 {
 
     RandomListNode list[4];
-    list[0].label = 1;
-    list[0].next = &list[1];
-    list[1].label = 1;
-    list[1].next = &list[2];
-    list[2].label = 2;
-    list[2].next = &list[3];
-    list[3].label = 2;
-    list[3].next = NULL;
+	list[0].label = 1;	
+	list[0].next = &list[1];
+	list[0].random = list + 2;
+    
+	list[1].label = 2;
+	list[1].next = &list[2];
+	list[1].random = list + 1;
+    
+	list[2].label = 3;
+	list[2].next = &list[3];
+	list[2].random = &list[2];
+    
+	list[3].label = 4;
+	list[3].next = NULL;
+	list[3].random = list;
 
 
     Solution solu;
