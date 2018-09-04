@@ -310,6 +310,25 @@ int LocateElem(LinkList L,ElemType e)
 	return true;
 }
 
+void printListFromTailToHeadRecursion(Node* head, vector<int> &res)
+{
+	if(head != NULL)
+	{
+		printListFromTailToHeadRecursion(head->next, res);
+		res.push_back(head->data);
+	}
+}
+
+vector<int> printListFromTailToHead(Node* head)
+{
+	vector<int> res;
+	printListFromTailToHeadRecursion(head->next, res);
+	return res;
+}
+
+
+
+
 int main()
 {
 	int i;
@@ -371,8 +390,10 @@ int main()
 	LTail = (LinkList)malloc(sizeof(Node));
 	LTail->next = NULL;
 	CreateListHead(&L1, 3);
-	/*CreateListTail(&LTail, 3);*/
-	CreateListTailByValue(LTail, 3);
+	CreateListTail(&LTail, 3);
+	/*CreateListTailByValue(LTail, 3);*/
+
+	printListFromTailToHead(LTail);
 	return 0;
 }
 
